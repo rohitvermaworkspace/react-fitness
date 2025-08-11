@@ -1,0 +1,28 @@
+@import "tailwindcss";
+:root {
+  --sidebar-bg: #030712; /* default: slate-950 */
+  --sidebar-text: #4a5565; /* slate-200 */
+  --sidebar-active-bg: #e0e7ff; /* indigo-100 */
+  --sidebar-active-text: #312e81; /* indigo-900 */
+  --sidebar-hover-bg: #1e293b; /* slate-800 */
+  --sidebar-hover-text: #f1f5f9; /* slate-100 */
+}
+
+[data-theme="light"] {
+  --sidebar-bg: #ffffff;
+  --sidebar-text: #4a5565;
+  --sidebar-active-bg: #bfdbfe; /* blue-200 */
+  --sidebar-active-text: #1e3a8a; /* blue-900 */
+  --sidebar-hover-bg: #f1f5f9; /* slate-100 */
+  --sidebar-hover-text: #0f172a; /* slate-900 */
+}
+
+[data-theme="dark"] {
+  --sidebar-bg: #0f172a;
+  --sidebar-text: #4a5565;
+  --sidebar-active-bg: #e0e7ff; /* indigo-100 */
+  --sidebar-active-text: #312e81; /* indigo-900 */
+  --sidebar-hover-bg: #1e293b; /* slate-800 */
+  --sidebar-hover-text: #f1f5f9; /* slate-100 */
+}
+

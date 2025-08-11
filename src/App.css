@@ -1,0 +1,107 @@
+body {
+  font-family: "urbanist", sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.container {
+  max-width: 90%;
+  margin: auto 0;
+  padding: 0rem;
+}
+
+header {
+  background-color: #08b20f;
+  color: white;
+  text-align: center;
+  width: 100%;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.grid {
+  display: grid;
+}
+.navbar-grid {
+  grid-template-columns: 0.5fr 1fr;
+  align-items: center;
+  padding: 0 3.2rem;
+}
+nav ul {
+  display: flex;
+  justify-content: flex-end;
+  gap: 3.2rem;
+}
+nav ul li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+
+  &:hover {
+    color: #333;
+    text-decoration: underline;
+  }
+}
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    max-width: 100%;
+  }
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 11px;
+      padding-top: 4px
+    }
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+    display: none; /* Hide menu by default */
+  }
+  .navbar-grid{
+    border-bottom: 1px solid black;
+  }
+  nav ul.show {
+    display: flex;
+  }
+  
+  .hamburger {
+    display: block;
+    position: absolute;
+    right: 2rem;
+    top: 0.85rem;
+  }
+  
+  .mobile-menu {
+      position: absolute;
+      top: 3.25rem;
+      left: 0;
+      width: 100%;
+      background-color: #08b20f;
+      padding: 1rem;
+      z-index: 1000;
+  }
+    .mobile-menu ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .mobile-menu ul li a:hover{
+    text-decoration: underline;
+  }
+  
+  .web-menu {
+    display: none; /* Hide web menu on small screens */
+  }
+  
+}
