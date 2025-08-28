@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const SidebarContext = createContext()
 
-export default function Sidebar({ children }) {
+export default function Sidebar({ children, user  }) {
   const [expanded, setExpanded] = useState(true);
 
   return (
@@ -33,8 +33,8 @@ export default function Sidebar({ children }) {
           <img src={profile} className="w-10 h-10 rounded-md" alt="" />
           <div className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : " w-0"}`}>
             <div className="leading-4">
-              <h4 className="font-semibold text-[var(--sidebar-text)]">John Doe</h4>
-              <span className="text-xs text-[var(--sidebar-text)]">johndoe@gmail.com</span>
+              <h4 className="font-semibold text-[var(--sidebar-text)]">{user?.user_metadata?.full_name || "No Name"}</h4>
+              <span className="text-xs text-[var(--sidebar-text)]">{user?.email}</span>
             </div>
             <MoreVertical size={20} className="text-[var(--sidebar-text)] cursor-pointer" />
           </div>

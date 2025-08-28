@@ -1,8 +1,14 @@
-import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import routeTitleMap from "../util/routeTitleMap";
+import { toast } from "react-toastify";
+import { supabase } from "../config/config";
 
-export default function Header() {
+export default function Header({ user }) {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
   const location = useLocation();
   const currentPath = location.pathname;
   const pageTitle = routeTitleMap[currentPath] || "Dashboard";
@@ -15,17 +21,42 @@ export default function Header() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
-  return (
-    <header className="w-full border-b bg-[var(--sidebar-bg)] shadow-sm border-[var(--sidebar-text)]">
-      <div className="flex items-center justify-between px-4 py-2">
+  const logoutHandler = async() => {
+    try {
+      const {error} = await supabase.auth.signOut();
+      if(error){
+       throw error
+      }
+      toast.success("Logout Successfull");
+      navigate("/login");
 
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+  return (
+    <header className="w-full border-b bg-[var(--sidebar-bg)] shadow-md font-semibold border-[var(--sidebar-text)]">
+      <div className="flex items-center justify-between px-4 py-2">
         {/* Page title */}
         <div className="flex items-center gap-3">
-          <span className="text-xl font-semibold text-[var(--sidebar-text)] hidden sm:block">
+          <span className="text-lg font-semibold text-[var(--sidebar-text)] md font-semibold:block">
             {pageTitle}
           </span>
         </div>
@@ -64,13 +95,49 @@ export default function Header() {
           </button>
 
           {/* Profile */}
-          <div className="w-8 h-8 rounded-full overflow-hidden cursor-pointer">
+         <div className="relative" ref={dropdownRef}>
+          {/* Profile Avatar */}
+          <div
+            className="w-8 h-8 rounded-full overflow-hidden cursor-pointer border-2 border-gray-300"
+            onClick={() => setOpen(!open)}
+          >
             <img
               src="https://i.pravatar.cc/300"
               alt="Profile"
               className="w-full h-full object-cover"
             />
           </div>
+
+          {/* Dropdown */}
+          {open && (
+            <div className="absolute right-0 mt-2 w-48 bg-[var(--sidebar-hover-bg)] rounded-xl shadow-lg z-50">
+              {/* <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                <p className="text-md font-semibold font-semibold text-[var(--sidebar-text) dark:text-gray-600">
+                  {user?.user_metadata?.full_name || "No Name"}
+                </p>
+                <p className="text-md font-semibold text-gray-500 dark:text-gray-400">
+                  {user?.email}
+                </p>
+              </div> */}
+              <button className="block px-4 py-2 text-md font-semibold text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left">
+                 <p>{user?.user_metadata?.full_name || "No Name"}</p>
+                 <p>{user?.email}</p>
+              </button>
+              <hr className="my-1 border-gray-200 dark:border-gray-700" />
+              <button className="block px-4 py-2 text-md font-semibold text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left">
+                Profile
+              </button>
+              <hr className="my-1 border-gray-200 dark:border-gray-700" />
+              <button className="block px-4 py-2 text-md font-semibold text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left">
+                Settings
+              </button>
+              <hr className="my-1 border-gray-200 dark:border-gray-700" />
+              <button className="block px-4 py-2 text-md font-semibold text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left" onClick={logoutHandler}>
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
         </div>
       </div>
     </header>
